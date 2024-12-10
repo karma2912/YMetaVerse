@@ -13,10 +13,20 @@ const Home = () => {
   const [name, setName] = useState({ name: "" });
   const [email, setEmail] = useState({ email: "" });
   const [image, setImage] = useState("/src/components/Home/images/image1.png");
+
+  const SettingImage =()=>{
+    if(localStorage.getItem("Image1")){
+      setImage(localStorage.getItem("Image1"))
+    }
+    if(localStorage.getItem("Image2")){
+      setImage(localStorage.getItem("Image2"))
+    }
+  }
   useEffect(() => {
     localStorage.setItem("Image1", image);
-  }, []);
-  const selectedImage = localStorage.getItem("Image1");
+  }, []); 
+  
+
   const images = [
     {
       id: 1,
@@ -112,7 +122,7 @@ const Home = () => {
                   className="h-full w-[5rem] rounded-2xl hover:cursor-pointer flex flex-col justify-around items-center hover:shadow-white hover:shadow-lg duration-300"
                   onClick={handleEdit}
                 >
-                  <img src={selectedImage} className="h-[7rem]"></img>
+                  <img src={image} className="h-[7rem]"></img>
                   <span className="text-sm">Edit</span>
                 </div>
                 <div className="flex justify-center items-center h-[3rem] w-[70%] rounded-xl border-2 border-green-400 ">{`${name}`}</div>
@@ -158,7 +168,7 @@ const Home = () => {
                   </div>
                 </div>
                 <div className="h-[74%] w-full flex justify-center items-center">
-                  <img src={selectedImage} className="h-[75%] w-[19%]" />
+                  <img src={image} className="h-[75%] w-[19%]" />
                 </div>
               </div>
               <div className="h-[65%] w-full overflow-y-auto bg-purple-1000 rounded-b-2xl text-white">
@@ -168,12 +178,13 @@ const Home = () => {
                   </span>
                 </div>
                 <div className="h-[60%] scrollable-content overflow-y-auto flex justify-center items-center">
-                  <div className="h-[75%] w-full">
+                  <div className="h-[75%] w-full" onClick={SettingImage}>
                     <CharacterComponent
                       image1={image1}
                       image1src={images[0].src}
                       image2={image2}
                       image2src={images[1].src}
+                      
                     />
                     <CharacterComponent
                       image1={image3}

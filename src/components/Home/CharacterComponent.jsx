@@ -3,12 +3,10 @@ import React from 'react'
 const CharacterComponent = (props) => {
     const {image1,image1src,image2,image2src} = props
     const handleImage1  =()=>{
-      console.log(image1src)
       localStorage.removeItem("Image2")
       localStorage.setItem("Image1",image1src)
     }
     const handleImage2  =()=>{
-      console.log(image2src)
       localStorage.removeItem("Image1")
       localStorage.setItem("Image2",image2src)
     }
