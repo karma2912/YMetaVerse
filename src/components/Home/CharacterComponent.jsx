@@ -6,7 +6,7 @@ const CharacterComponent = (props) => {
       localStorage.removeItem("Image2")
       localStorage.setItem("Image1",image1src)
     }
-    const handleImage2  =()=>{
+    const handleImage2 =()=>{
       localStorage.removeItem("Image1")
       localStorage.setItem("Image2",image2src)
     }

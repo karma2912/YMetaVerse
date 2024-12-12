@@ -9,12 +9,18 @@ import image6 from "./images/image6.png";
 import image7 from "./images/image7.png";
 import image8 from "./images/image8.png";
 import CharacterComponent from "./CharacterComponent";
+import { Link } from "react-router-dom";
 const Home = () => {
-  const [name, setName] = useState({ name: "" });
-  const [email, setEmail] = useState({ email: "" });
+ const [credentials,setCredentials] = useState({name:""})
+ const [name,setName] = useState("")
+ const [email,setEmail] = useState("")
   const [image, setImage] = useState("/src/components/Home/images/image1.png");
-
-  const SettingImage =()=>{
+  
+  useEffect(()=>{
+    setCredentials({name:name})
+  },[name])
+ 
+  const SettingImage =async ()=>{
     if(localStorage.getItem("Image1")){
       setImage(localStorage.getItem("Image1"))
     }
@@ -22,6 +28,7 @@ const Home = () => {
       setImage(localStorage.getItem("Image2"))
     }
   }
+
   useEffect(() => {
     localStorage.setItem("Image1", image);
   }, []); 
@@ -66,6 +73,20 @@ const Home = () => {
     setEdit(true);
   };
 
+  const handleBack =()=>{
+    setImage("/src/components/Home/images/image1.png")
+    console.log("HIiiiii")
+  }
+
+  const handleSetCharacter =()=>{
+    setEdit(false)
+    console.log("set charcter")
+  }
+
+  const onchange =(e)=>{
+    setCredentials({...credentials,[e.target.name]:e.target.value})
+  }
+
   const [edit, setEdit] = useState(false);
   const handleHome = async () => {
     const response = await fetch("http://localhost:4000/api/auth/getuser", {
@@ -76,8 +97,8 @@ const Home = () => {
       },
     });
     const json = await response.json();
-    setName(json.name);
-    setEmail(json.email);
+    setName(json.name)
+    setEmail(json.email)
   };
 
   const userMedia = async () => {
@@ -116,7 +137,7 @@ const Home = () => {
             ></video>
           </div>
           <div className="h-full w-[47%]  flex justify-start items-center ">
-            <div className="h-[50%] w-[40%] flex flex-col justify-between items-center ">
+            <div className="h-[50%] w-[45%] flex flex-col justify-between items-center ">
               <div className="flex justify-between items-center h-[11rem] w-full p-2">
                 <div
                   className="h-full w-[5rem] rounded-2xl hover:cursor-pointer flex flex-col justify-around items-center hover:shadow-white hover:shadow-lg duration-300"
@@ -125,11 +146,11 @@ const Home = () => {
                   <img src={image} className="h-[7rem]"></img>
                   <span className="text-sm">Edit</span>
                 </div>
-                <div className="flex justify-center items-center h-[3rem] w-[70%] rounded-xl border-2 border-green-400 ">{`${name}`}</div>
-              </div>
-              <div className="h-[3rem] w-full flex justify-center items-center rounded-xl bg-green-400 text-black font-medium hover:cursor-pointer hover:bg-green-600 duration-300">
+                <input className="flex justify-center items-center h-[3rem] w-[70%] text-center rounded-xl border-2 border-green-400 bg-purple-1000 text-white" name="name" value={credentials.name} onChange={onchange} />
+                </div>
+              <Link className="h-[3rem] w-full flex justify-center items-center rounded-xl bg-green-400 text-black font-medium hover:cursor-pointer hover:bg-green-600 duration-300" to="/room">
                 Join
-              </div>
+              </Link>
             </div>
           </div>
         </div>
@@ -161,6 +182,7 @@ const Home = () => {
                   <div
                     className="hover:cursor-pointer mr-8 text-white"
                     onClick={() => {
+                      handleBack()
                       setEdit(false);
                     }}
                   >
@@ -210,12 +232,13 @@ const Home = () => {
                   <div
                     className="border-2 border-purple-900 text-white font-medium px-5 bg-purple-900 py-3 hover:bg-purple-950 hover:cursor-pointer duration-300 rounded-2xl"
                     onClick={() => {
+                      handleBack(),
                       setEdit(false);
                     }}
                   >
                     Back
                   </div>
-                  <div className="border-2 border-green-400 bg-green-400 font-medium px-5 py-3 rounded-2xl hover:bg-green-600 duration-300 hover:cursor-pointer">
+                  <div className="border-2 border-green-400 bg-green-400 font-medium px-5 py-3 rounded-2xl hover:bg-green-600 duration-300 hover:cursor-pointer" onClick={handleSetCharacter}>
                     Set Character
                   </div>
                 </div>
