@@ -1,21 +1,21 @@
 import React, { useEffect, useRef, useState } from "react";
 import logo from "./logo.png";
-import image1 from "./images/image1.png";
-import image2 from "./images/image2.png";
-import image3 from "./images/image3.png";
-import image4 from "./images/image4.png";
-import image5 from "./images/image5.png";
-import image6 from "./images/image6.png";
-import image7 from "./images/image7.png";
-import image8 from "./images/image8.png";
+import image1 from "../../assets/newImage1.png"
+import image2 from "../../assets/newImage2.png"
+import image3 from "../../assets/newImage3.png"
+import image4 from "../../assets/newImage4.png"
 import CharacterComponent from "./CharacterComponent";
 import { Link } from "react-router-dom";
 const Home = () => {
  const [credentials,setCredentials] = useState({name:""})
  const [name,setName] = useState("")
  const [email,setEmail] = useState("")
-  const [image, setImage] = useState("/src/components/Home/images/image1.png");
-  
+  const [image, setImage] = useState(image1);
+  const [phaserImage,setPhaserImage] = useState("src/assets/confirm1.png")
+   
+  const handleJoin =()=>{
+    localStorage.setItem("Final-Image",phaserImage)
+  }
   useEffect(()=>{
     setCredentials({name:name})
   },[name])
@@ -23,9 +23,11 @@ const Home = () => {
   const SettingImage =async ()=>{
     if(localStorage.getItem("Image1")){
       setImage(localStorage.getItem("Image1"))
+      setPhaserImage(localStorage.getItem("phaserImage1"))
     }
     if(localStorage.getItem("Image2")){
       setImage(localStorage.getItem("Image2"))
+      setPhaserImage(localStorage.getItem("phaserImage2"))
     }
   }
 
@@ -37,36 +39,24 @@ const Home = () => {
   const images = [
     {
       id: 1,
-      src: "/src/components/Home/images/image1.png",
+      src: image1,
+      phaserSrc: "src/assets/confirm1.png"
     },
     {
       id: 2,
-      src: "/src/components/Home/images/image2.png",
+      src: image2,
+      phaserSrc: "src/assets/confirm2.png"
     },
     {
       id: 3,
-      src: "/src/components/Home/images/image3.png",
+      src: image3,
+      phaserSrc: "src/assets/confirm3.png"
     },
     {
       id: 4,
-      src: "/src/components/Home/images/image4.png",
-    },
-    {
-      id: 5,
-      src: "/src/components/Home/images/image5.png",
-    },
-    {
-      id: 6,
-      src: "/src/components/Home/images/image6.png",
-    },
-    {
-      id: 7,
-      src: "/src/components/Home/images/image7.png",
-    },
-    {
-      id: 8,
-      src: "/src/components/Home/images/image8.png",
-    },
+      src: image4,
+      phaserSrc: "src/assets/confirm4.png"
+    }
   ];
   const videoRef = useRef();
   const handleEdit = () => {
@@ -74,13 +64,11 @@ const Home = () => {
   };
 
   const handleBack =()=>{
-    setImage("/src/components/Home/images/image1.png")
-    console.log("HIiiiii")
+    setImage("/src/components/Home/images/newImage1.png")
   }
 
   const handleSetCharacter =()=>{
     setEdit(false)
-    console.log("set charcter")
   }
 
   const onchange =(e)=>{
@@ -100,7 +88,6 @@ const Home = () => {
     setName(json.name)
     setEmail(json.email)
   };
-
   const userMedia = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
@@ -137,18 +124,18 @@ const Home = () => {
             ></video>
           </div>
           <div className="h-full w-[47%]  flex justify-start items-center ">
-            <div className="h-[50%] w-[45%] flex flex-col justify-between items-center ">
+            <div className="h-[50%] w-[50%] flex flex-col justify-between items-center ">
               <div className="flex justify-between items-center h-[11rem] w-full p-2">
                 <div
-                  className="h-full w-[5rem] rounded-2xl hover:cursor-pointer flex flex-col justify-around items-center hover:shadow-white hover:shadow-lg duration-300"
+                  className="h-full w-[8rem] rounded-2xl hover:cursor-pointer flex flex-col justify-around items-center hover:shadow-white hover:shadow-lg duration-300"
                   onClick={handleEdit}
                 >
-                  <img src={image} className="h-[7rem]"></img>
+                  <img src={image} className="h-[7rem] w-[6rem]"></img>
                   <span className="text-sm">Edit</span>
                 </div>
                 <input className="flex justify-center items-center h-[3rem] w-[70%] text-center rounded-xl border-2 border-green-400 bg-purple-1000 text-white" name="name" value={credentials.name} onChange={onchange} />
                 </div>
-              <Link className="h-[3rem] w-full flex justify-center items-center rounded-xl bg-green-400 text-black font-medium hover:cursor-pointer hover:bg-green-600 duration-300" to="/room">
+              <Link className="h-[3rem] w-full flex justify-center items-center rounded-xl bg-green-400 text-black font-medium hover:cursor-pointer hover:bg-green-600 duration-300" onClick={handleJoin} to="/room">
                 Join
               </Link>
             </div>
@@ -190,7 +177,7 @@ const Home = () => {
                   </div>
                 </div>
                 <div className="h-[74%] w-full flex justify-center items-center">
-                  <img src={image} className="h-[75%] w-[19%]" />
+                  <img src={image} className="h-[75%] w-[27%]" />
                 </div>
               </div>
               <div className="h-[65%] w-full overflow-y-auto bg-purple-1000 rounded-b-2xl text-white">
@@ -204,27 +191,18 @@ const Home = () => {
                     <CharacterComponent
                       image1={image1}
                       image1src={images[0].src}
+                      phaser1Src = {images[0].phaserSrc}
                       image2={image2}
                       image2src={images[1].src}
-                      
+                      phaser2Src = {images[1].phaserSrc}
                     />
                     <CharacterComponent
                       image1={image3}
                       image1src={images[2].src}
+                      phaser1Src = {images[2].phaserSrc}
                       image2={image4}
                       image2src={images[3].src}
-                    />
-                    <CharacterComponent
-                      image1={image5}
-                      image1src={images[4].src}
-                      image2={image6}
-                      image2src={images[5].src}
-                    />
-                    <CharacterComponent
-                      image1={image7}
-                      image1src={images[6].src}
-                      image2={image8}
-                      image2src={images[7].src}
+                      phaser2Src = {images[3].phaserSrc}
                     />
                   </div>
                 </div>
