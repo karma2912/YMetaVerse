@@ -6,6 +6,7 @@ const PhaserGame = () => {
 
   useEffect(() => {
     // Phaser game configuration
+    console.log("New User has joined")
     const config = {
       type: Phaser.AUTO,
       width: 895,
@@ -22,7 +23,7 @@ const PhaserGame = () => {
       physics: {
         default: "arcade",
         arcade: {
-          debug: true,
+          debug: false,
         },
       },
     };
@@ -53,6 +54,11 @@ const PhaserGame = () => {
       const grassLayer = map.createLayer("grass", tileset, 0, 0);
 
       this.player = this.physics.add.sprite(200, 400, "dude");
+      this.playerText = this.add.text(this.player.x ,this.player.y ,"Yash",{
+        font:"15px arial",
+        fill:"#000000"
+      })
+      this.physics.world.enable(this.playerText)
       this.player.setBounce(0.2);
       this.player.setScale(1.3);
 
@@ -89,7 +95,6 @@ const PhaserGame = () => {
       });
 
       this.cursors = this.input.keyboard.createCursorKeys();
-      console.log(this.cursors);
 
       this.physics.add.collider(this.player, grassLayer);
       grassLayer.setCollisionBetween(11, 12);
@@ -111,8 +116,12 @@ const PhaserGame = () => {
     }
 
     function update() {
+
       this.player.setVelocityX(0);
       this.player.setVelocityY(0);
+      if (this.player && this.playerText) {
+        this.playerText.setPosition(this.player.x - 18, this.player.y -60);
+      }
       if (this.cursors.up.isDown) {
         this.player.setVelocityY(-200);
         this.player.anims.play("up", true);

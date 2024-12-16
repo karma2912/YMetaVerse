@@ -117,7 +117,7 @@ const Home = () => {
         <div className="h-1/2 w-full flex justify-between  p-4">
           <div className="h-full w-[47%] flex justify-end items-center">
             <video
-              className="h-[18rem] w-[25rem] object-cover border-2 rounded-xl border-white"
+              className="h-[18rem] w-[25rem] object-cover border-4 rounded-xl border-purple-900"
               ref={videoRef}
               autoPlay
               muted
