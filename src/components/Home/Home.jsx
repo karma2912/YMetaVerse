@@ -15,6 +15,7 @@ const Home = () => {
    
   const handleJoin =()=>{
     localStorage.setItem("Final-Image",phaserImage)
+    localStorage.setItem("Final-Name",credentials.name)
   }
   useEffect(()=>{
     setCredentials({name:name})
@@ -101,8 +102,10 @@ const Home = () => {
       console.log("Unable to get the stream");
     }
   };
+  useEffect(()=>{
+    userMedia();
+  },[])
   handleHome();
-  userMedia();
   return (
     <>
       <div className="h-full w-full flex flex-col justify-between items-center bg-purple-1000 text-white overflow-hidden">

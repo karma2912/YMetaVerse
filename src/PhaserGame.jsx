@@ -1,12 +1,19 @@
 import { useEffect, useState } from "react";
 import Phaser from "phaser";
+import { Socket } from "socket.io-client";
+import { useSocket } from "./context/Socket";
 
-const PhaserGame = () => {
-  const [finalImage, setFinalImage] =  useState(localStorage.getItem("Final-Image"));
-
+const PhaserGame = (props) => {
+  const { x, y } = props;
+  const { socket } = useSocket();
+  const finalImage = localStorage.getItem("Final-Image");
+  const finalName = localStorage.getItem("Final-Name");
+  socket.on("NewUser-adding",(data)=>{
+    const {a,b} = data
+   console.log("this is a",a,"this is b",b)
+  })
   useEffect(() => {
     // Phaser game configuration
-    console.log("New User has joined")
     const config = {
       type: Phaser.AUTO,
       width: 895,
@@ -53,12 +60,13 @@ const PhaserGame = () => {
       const curtainsLayer = map.createLayer("Curtains", tileset, 0, 0);
       const grassLayer = map.createLayer("grass", tileset, 0, 0);
 
-      this.player = this.physics.add.sprite(200, 400, "dude");
-      this.playerText = this.add.text(this.player.x ,this.player.y ,"Yash",{
-        font:"15px arial",
-        fill:"#000000"
-      })
-      this.physics.world.enable(this.playerText)
+      this.player = this.physics.add.sprite(x, y, "dude");
+
+      this.playerText = this.add.text(this.player.x, this.player.y, finalName, {
+        font: "15px arial",
+        fill: "#000000",
+      });
+      this.physics.world.enable(this.playerText);
       this.player.setBounce(0.2);
       this.player.setScale(1.3);
 
@@ -116,11 +124,10 @@ const PhaserGame = () => {
     }
 
     function update() {
-
       this.player.setVelocityX(0);
       this.player.setVelocityY(0);
       if (this.player && this.playerText) {
-        this.playerText.setPosition(this.player.x - 18, this.player.y -60);
+        this.playerText.setPosition(this.player.x - 18, this.player.y - 60);
       }
       if (this.cursors.up.isDown) {
         this.player.setVelocityY(-200);
