@@ -4,16 +4,16 @@ import { Socket } from "socket.io-client";
 import { useSocket } from "./context/Socket";
 
 const PhaserGame = (props) => {
-  const { x, y } = props;
+  
+  const [user,setUser] = useState(false)
   const { socket } = useSocket();
   const finalImage = localStorage.getItem("Final-Image");
   const finalName = localStorage.getItem("Final-Name");
-  socket.on("NewUser-adding",(data)=>{
-    const {a,b} = data
-   console.log("this is a",a,"this is b",b)
-  })
+ 
   useEffect(() => {
     // Phaser game configuration
+    const { x, y,newName } = props;
+    console.log("props",x,y,newName)
     const config = {
       type: Phaser.AUTO,
       width: 895,
@@ -46,6 +46,12 @@ const PhaserGame = (props) => {
         frameWidth: 64,
         frameHeight: 64,
       });
+
+        this.load.spritesheet("dude",finalImage,{
+          frameHeight: 64,
+          frameWidth: 64
+        })
+      
     }
 
     function create() {
@@ -62,10 +68,21 @@ const PhaserGame = (props) => {
 
       this.player = this.physics.add.sprite(x, y, "dude");
 
+ 
+        this.player1 = this.physics.add.sprite(x,y,"dude")
+      
+      
+
       this.playerText = this.add.text(this.player.x, this.player.y, finalName, {
         font: "15px arial",
         fill: "#000000",
       });
+      console.log("newName : ",newName)
+        this.playerText = this.add.text(this.player1.x,this.player1.y,newName,{
+          font: "15px arial",
+          fill : "#000000"
+        })
+      
       this.physics.world.enable(this.playerText);
       this.player.setBounce(0.2);
       this.player.setScale(1.3);
@@ -150,7 +167,7 @@ const PhaserGame = (props) => {
     return () => {
       game.destroy(true);
     };
-  }, []); // Empty dependency array ensures this runs only once
+  }, [])
 
   return <div id="game-container" />;
 };

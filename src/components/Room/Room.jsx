@@ -1,24 +1,28 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PhaserGame from '../../PhaserGame'
 import { useSocket } from '../../context/Socket'
 
 const Room = () => {
+  const [newName,setNewName] = useState('')
+  const [x,setX] = useState(200)
+  const [y,setY] = useState(400)
   const name = localStorage.getItem("Final-Name")
-  let x= 200 
-  let y = 400
-  let a = 250
-  let b = 450
   const {socket} = useSocket()
   socket.emit("new-player",{name,x,y})
   socket.on("User-joined",(data)=>{
-   console.log("We got the player, Helloo",data,"!!")
-   socket.emit("Adding-player",{a,b})
+    const {name,x,y} = data
+   console.log("We got the player, Helloo",name,x,y,"!!")
+    setNewName(name)
+    setX(x)
+    setY(y)
+   socket.emit("Adding-player",{x,y})
   })
   return (
     <>
-    <PhaserGame x={x} y={y}/>
+    <PhaserGame x={x} y={y} newName={newName}/>
     </>
   )
 }
 
 export default Room
+
