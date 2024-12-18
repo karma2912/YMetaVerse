@@ -15,7 +15,7 @@ const Room = () => {
     setNewName(name)
     setX(x)
     setY(y)
-   socket.emit("Adding-player",{x,y})
+   socket.emit("Adding-player",{name,x,y})
   })
   return (
     <>

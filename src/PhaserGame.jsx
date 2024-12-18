@@ -9,11 +9,12 @@ const PhaserGame = (props) => {
   const { socket } = useSocket();
   const finalImage = localStorage.getItem("Final-Image");
   const finalName = localStorage.getItem("Final-Name");
- 
+ let x = 200, y = 400,newName = "Karma"
   useEffect(() => {
     // Phaser game configuration
-    const { x, y,newName } = props;
-    console.log("props",x,y,newName)
+    socket.on("Adding-player",(data)=>{
+      console.log('Heyy this is data inside the phaser',data)
+    })
     const config = {
       type: Phaser.AUTO,
       width: 895,
@@ -30,7 +31,7 @@ const PhaserGame = (props) => {
       physics: {
         default: "arcade",
         arcade: {
-          debug: false,
+          debug: true,
         },
       },
     };
@@ -69,7 +70,7 @@ const PhaserGame = (props) => {
       this.player = this.physics.add.sprite(x, y, "dude");
 
  
-        this.player1 = this.physics.add.sprite(x,y,"dude")
+        this.player1 = this.physics.add.sprite(x+100,y+100,"dude")
       
       
 
@@ -78,12 +79,13 @@ const PhaserGame = (props) => {
         fill: "#000000",
       });
       console.log("newName : ",newName)
-        this.playerText = this.add.text(this.player1.x,this.player1.y,newName,{
+        this.playerText1 = this.add.text(this.player1.x,this.player1.y,newName,{
           font: "15px arial",
           fill : "#000000"
         })
       
       this.physics.world.enable(this.playerText);
+      this.physics.world.enable(this.playerText1);
       this.player.setBounce(0.2);
       this.player.setScale(1.3);
 
@@ -145,6 +147,9 @@ const PhaserGame = (props) => {
       this.player.setVelocityY(0);
       if (this.player && this.playerText) {
         this.playerText.setPosition(this.player.x - 18, this.player.y - 60);
+      }
+      if (this.player1 && this.playerText1) {
+        this.playerText1.setPosition(this.player1.x - 18, this.player1.y - 60);
       }
       if (this.cursors.up.isDown) {
         this.player.setVelocityY(-200);
