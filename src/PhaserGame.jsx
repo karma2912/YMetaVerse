@@ -5,16 +5,20 @@ import { useSocket } from "./context/Socket";
 
 const PhaserGame = (props) => {
   
-  const [user,setUser] = useState(false)
   const { socket } = useSocket();
+  const finalName = localStorage.getItem("Final-Name")
   const finalImage = localStorage.getItem("Final-Image");
-  const finalName = localStorage.getItem("Final-Name");
- let x = 200, y = 400,newName = "Karma"
+ let x = 200, y = 400
+
   useEffect(() => {
+    if(socket){
+      console.log("Socket is connected",socket.connected)
+    }
+    socket.on("Incoming-call", (data) => {
+      const { fromName, x, y } = data;
+      console.log("This is data from incoming call", fromName, x, y);
+    });
     // Phaser game configuration
-    socket.on("Adding-player",(data)=>{
-      console.log('Heyy this is data inside the phaser',data)
-    })
     const config = {
       type: Phaser.AUTO,
       width: 895,
@@ -47,11 +51,6 @@ const PhaserGame = (props) => {
         frameWidth: 64,
         frameHeight: 64,
       });
-
-        this.load.spritesheet("dude",finalImage,{
-          frameHeight: 64,
-          frameWidth: 64
-        })
       
     }
 
@@ -68,24 +67,13 @@ const PhaserGame = (props) => {
       const grassLayer = map.createLayer("grass", tileset, 0, 0);
 
       this.player = this.physics.add.sprite(x, y, "dude");
-
- 
-        this.player1 = this.physics.add.sprite(x+100,y+100,"dude")
       
-      
-
       this.playerText = this.add.text(this.player.x, this.player.y, finalName, {
         font: "15px arial",
         fill: "#000000",
       });
-      console.log("newName : ",newName)
-        this.playerText1 = this.add.text(this.player1.x,this.player1.y,newName,{
-          font: "15px arial",
-          fill : "#000000"
-        })
       
       this.physics.world.enable(this.playerText);
-      this.physics.world.enable(this.playerText1);
       this.player.setBounce(0.2);
       this.player.setScale(1.3);
 
@@ -148,9 +136,6 @@ const PhaserGame = (props) => {
       if (this.player && this.playerText) {
         this.playerText.setPosition(this.player.x - 18, this.player.y - 60);
       }
-      if (this.player1 && this.playerText1) {
-        this.playerText1.setPosition(this.player1.x - 18, this.player1.y - 60);
-      }
       if (this.cursors.up.isDown) {
         this.player.setVelocityY(-200);
         this.player.anims.play("up", true);
@@ -172,7 +157,7 @@ const PhaserGame = (props) => {
     return () => {
       game.destroy(true);
     };
-  }, [])
+  },[socket])
 
   return <div id="game-container" />;
 };
