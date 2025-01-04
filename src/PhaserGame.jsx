@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Phaser from "phaser";
 import { Socket } from "socket.io-client";
 import { useSocket } from "./context/Socket";
@@ -7,17 +7,16 @@ const PhaserGame = (props) => {
   const { socket } = useSocket();
   const finalName = localStorage.getItem("Final-Name");
   const finalImage = localStorage.getItem("Final-Image");
-  let x = 200,
-    y = 400;
+  let x = 200,y = 400;
 
   useEffect(() => {
     if (socket) {
       console.log("Socket is connected", socket.connected);
     }
     socket.on("Incoming-call", (data) => {
-      const { name, fromName, pos } = data;
-      console.log("This is data from incoming call", name, fromName, pos);
-      console.log(finalName);
+      const {fromName, pos } = data;
+      console.log("This is data from incoming call", fromName, pos.x,pos.y);
+      console.log("This is final name",finalName);
     });
 
     socket.on("position-changed", (data) => {
@@ -152,12 +151,27 @@ const PhaserGame = (props) => {
       } else if (this.cursors.down.isDown) {
         this.player.setVelocityY(200);
         this.player.anims.play("down", true);
+        socket.emit("player-moved", {
+          finalName,
+          x: this.player.x,
+          y: this.player.y,
+        });
       } else if (this.cursors.right.isDown) {
         this.player.setVelocityX(200);
         this.player.anims.play("right", true);
+        socket.emit("player-moved", {
+          finalName,
+          x: this.player.x,
+          y: this.player.y,
+        });
       } else if (this.cursors.left.isDown) {
         this.player.setVelocityX(-200);
         this.player.anims.play("left", true);
+        socket.emit("player-moved", {
+          finalName,
+          x: this.player.x,
+          y: this.player.y,
+        });
       } else {
         this.player.anims.play("stop", true);
       }
