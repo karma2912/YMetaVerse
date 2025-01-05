@@ -14,8 +14,9 @@ const PhaserGame = (props) => {
       console.log("Socket is connected", socket.connected);
     }
     socket.on("Incoming-call", (data) => {
-      const {fromName, pos } = data;
+      const {players,fromName, pos } = data;
       console.log("This is data from incoming call", fromName, pos.x,pos.y);
+      console.log("This are the players",players)
       console.log("This is final name",finalName);
     });
 
