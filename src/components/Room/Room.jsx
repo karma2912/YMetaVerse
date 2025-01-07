@@ -16,6 +16,7 @@ const Room = () => {
     setX(x);
     setY(y);
     socket.emit("Adding-player", { name, x, y });
+    console.log("This is name of Adding-player",name)
   });
   return (
     <>

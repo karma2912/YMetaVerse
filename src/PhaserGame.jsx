@@ -1,13 +1,15 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Phaser from "phaser";
 import { Socket } from "socket.io-client";
-import { useSocket } from "./context/Socket";
+import { SocketProvider, useSocket } from "./context/Socket";
 
 const PhaserGame = (props) => {
   const { socket } = useSocket();
   const finalName = localStorage.getItem("Final-Name");
   const finalImage = localStorage.getItem("Final-Image");
   let x = 200,y = 400;
+  
+  const [state,setState] = useState(false)
 
   useEffect(() => {
     if (socket) {
@@ -20,10 +22,6 @@ const PhaserGame = (props) => {
       console.log("This is final name",finalName);
     });
 
-    socket.on("position-changed", (data) => {
-      const { fromName, playerPositon } = data;
-      console.log("Position is changed of ", fromName, "at : ", playerPositon);
-    });
     // Phaser game configuration
     const config = {
       type: Phaser.AUTO,
@@ -72,16 +70,18 @@ const PhaserGame = (props) => {
       const grassLayer = map.createLayer("grass", tileset, 0, 0);
 
       this.player = this.physics.add.sprite(x, y, "dude");
-
+     console.log(this.player)
       this.playerText = this.add.text(this.player.x, this.player.y, finalName, {
         font: "15px arial",
         fill: "#000000",
       });
-
+  
       this.physics.world.enable(this.playerText);
       this.player.setBounce(0.2);
       this.player.setScale(1.3);
-
+      const setPosition=()=>{
+        console.log("position")
+      }
       this.anims.create({
         key: "left",
         frames: this.anims.generateFrameNumbers("dude", { start: 12, end: 17 }),
@@ -115,7 +115,7 @@ const PhaserGame = (props) => {
       });
 
       this.cursors = this.input.keyboard.createCursorKeys();
-
+  
       this.physics.add.collider(this.player, grassLayer);
       grassLayer.setCollisionBetween(11, 12);
 
@@ -136,7 +136,12 @@ const PhaserGame = (props) => {
     }
 
     function update() {
-      this.player.setVelocityX(0);
+      socket.on("position-changed", (data) => {
+        const { fromName, playerPosition } = data;
+        console.log("Position is changed of ", fromName, "at : ", playerPosition.x,playerPosition.y);
+        this.player.setPosition(playerPosition.x,playerPosition.y)
+      });
+      this.player.setVelocityX(0)
       this.player.setVelocityY(0);
       if (this.player && this.playerText) {
         this.playerText.setPosition(this.player.x - 18, this.player.y - 60);
