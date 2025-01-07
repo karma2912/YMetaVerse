@@ -7,19 +7,20 @@ const PhaserGame = (props) => {
   const { socket } = useSocket();
   const finalName = localStorage.getItem("Final-Name");
   const finalImage = localStorage.getItem("Final-Image");
-  let x = 200,y = 400;
-  
-  const [state,setState] = useState(false)
+  let x = 200,
+    y = 400;
+
+  const [state, setState] = useState(false);
 
   useEffect(() => {
     if (socket) {
       console.log("Socket is connected", socket.connected);
     }
     socket.on("Incoming-call", (data) => {
-      const {players,fromName, pos } = data;
-      console.log("This is data from incoming call", fromName, pos.x,pos.y);
-      console.log("This are the players",players)
-      console.log("This is final name",finalName);
+      const { players, fromName, pos } = data;
+      console.log("This is data from incoming call", fromName, pos.x, pos.y);
+      console.log("This are the players", players);
+      console.log("This is final name", finalName);
     });
 
     // Phaser game configuration
@@ -70,18 +71,18 @@ const PhaserGame = (props) => {
       const grassLayer = map.createLayer("grass", tileset, 0, 0);
 
       this.player = this.physics.add.sprite(x, y, "dude");
-     console.log(this.player)
+      console.log(this.player);
       this.playerText = this.add.text(this.player.x, this.player.y, finalName, {
         font: "15px arial",
         fill: "#000000",
       });
-  
+
       this.physics.world.enable(this.playerText);
       this.player.setBounce(0.2);
       this.player.setScale(1.3);
-      const setPosition=()=>{
-        console.log("position")
-      }
+      const setPosition = () => {
+        console.log("position");
+      };
       this.anims.create({
         key: "left",
         frames: this.anims.generateFrameNumbers("dude", { start: 12, end: 17 }),
@@ -115,7 +116,7 @@ const PhaserGame = (props) => {
       });
 
       this.cursors = this.input.keyboard.createCursorKeys();
-  
+
       this.physics.add.collider(this.player, grassLayer);
       grassLayer.setCollisionBetween(11, 12);
 
@@ -138,10 +139,16 @@ const PhaserGame = (props) => {
     function update() {
       socket.on("position-changed", (data) => {
         const { fromName, playerPosition } = data;
-        console.log("Position is changed of ", fromName, "at : ", playerPosition.x,playerPosition.y);
-        this.player.setPosition(playerPosition.x,playerPosition.y)
+        console.log(
+          "Position is changed of ",
+          fromName,
+          "at : ",
+          playerPosition.x,
+          playerPosition.y
+        );
+        this.player.setPosition(playerPosition.x, playerPosition.y);
       });
-      this.player.setVelocityX(0)
+      this.player.setVelocityX(0);
       this.player.setVelocityY(0);
       if (this.player && this.playerText) {
         this.playerText.setPosition(this.player.x - 18, this.player.y - 60);
