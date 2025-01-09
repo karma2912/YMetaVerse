@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Phaser from "phaser";
 import { Socket } from "socket.io-client";
 import { SocketProvider, useSocket } from "./context/Socket";
@@ -137,7 +137,7 @@ const PhaserGame = (props) => {
     }
 
     function update() {
-      socket.on("position-changed", (data) => {
+      const handlePositionChanged = useCallback((data)=>{
         const { fromName, playerPosition } = data;
         console.log(
           "Position is changed of ",
@@ -147,7 +147,11 @@ const PhaserGame = (props) => {
           playerPosition.y
         );
         this.player.setPosition(playerPosition.x, playerPosition.y);
-      });
+      },[])
+
+      socket.on("position-changed", handlePositionChanged);
+
+      
       this.player.setVelocityX(0);
       this.player.setVelocityY(0);
       if (this.player && this.playerText) {
