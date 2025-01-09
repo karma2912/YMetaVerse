@@ -20,7 +20,7 @@ const Room = () => {
   });
   return (
     <>
-      <PhaserGame x={x} y={y} newName={newName} />
+      <PhaserGame/>
     </>
   );
 };
