@@ -1,4 +1,4 @@
-import { useEffect} from "react";
+import { useEffect, useState} from "react";
 import Phaser from "phaser";
 import { useSocket } from "./context/Socket";
 
@@ -78,23 +78,14 @@ const PhaserGame = (props) => {
       const grassLayer = map.createLayer("grass", tileset, 0, 0);
 
       this.player = this.physics.add.sprite(x, y, "dude");
-      this.player1 = this.physics.add.sprite(600,400, "dude");
       console.log("Inside Create",this.player);
       this.playerText = this.add.text(this.player.x, this.player.y, finalName, {
         font: "15px arial",
         fill: "#000000",
       });
-      this.playerText1 = this.add.text(this.player1.x, this.player1.y, finalName, {
-        font: "15px arial",
-        fill: "#000000",
-      });
-
       this.physics.world.enable(this.playerText);
-      this.physics.world.enable(this.playerText1);
       this.player.setBounce(0.2);
       this.player.setScale(1.3);
-      this.player1.setBounce(0.2);
-      this.player1.setScale(1.3);
       const setPosition = () => {
         console.log("position");
       };
@@ -157,9 +148,6 @@ const PhaserGame = (props) => {
       this.player.setVelocityY(0);
       if (this.player && this.playerText) {
         this.playerText.setPosition(this.player.x - 18, this.player.y - 60);
-      }
-      if (this.player1 && this.playerText1) {
-        this.playerText1.setPosition(this.player1.x - 18, this.player1.y - 60);
       }
       if (this.cursors.up.isDown) {
         this.player.setVelocityY(-200);
