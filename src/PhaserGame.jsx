@@ -1,4 +1,4 @@
-import { useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import Phaser from "phaser";
 import { useSocket } from "./context/Socket";
 
@@ -78,7 +78,7 @@ const PhaserGame = (props) => {
       const grassLayer = map.createLayer("grass", tileset, 0, 0);
 
       this.player = this.physics.add.sprite(x, y, "dude");
-      console.log("Inside Create",this.player);
+      console.log("Inside Create", this.player);
       this.playerText = this.add.text(this.player.x, this.player.y, finalName, {
         font: "15px arial",
         fill: "#000000",
@@ -140,7 +140,6 @@ const PhaserGame = (props) => {
       curtainsLayer.setCollisionBetween(8, 9);
       curtainsLayer.setCollisionBetween(4, 5);
       curtainsLayer.setCollisionBetween(11, 12);
-
     }
 
     function update() {
